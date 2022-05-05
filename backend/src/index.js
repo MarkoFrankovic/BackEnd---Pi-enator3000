@@ -1,5 +1,17 @@
-import express from 'express';
-const app = express() // instanciranje aplikacije
-const port = 3000 // port na kojem će web server slušati
-app.get('/', (req, res) => res.send('Hello World, ovaj puta preko browsera!'))
-app.listen(port, () => console.log(`Slušam na portu ${port}!`))
+var express = require('express');
+var app = express();
+
+app.get('/', function(req, res){
+   res.send("Hello world!");
+});
+
+app.get('/pjesme', function(req, res){
+   // ovo moze i iz baze
+   let pjesme = [
+     "pjesma1",
+     "pjesma2",
+   ]
+   res.send(pjesme);
+});
+
+app.listen(3000);
