@@ -1,17 +1,27 @@
-var express = require('express');
-var app = express();
-
-app.get('/', function(req, res){
-   res.send("Hello world!");
+const { MongoClient } = import("mongodb");
+const connectionString = process.env.ATLAS_URI;
+const client = new MongoClient(connectionString, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-app.get('/pjesme', function(req, res){
-   // ovo moze i iz baze
-   let pjesme = [
-     "pjesma1",
-     "pjesma2",
-   ]
-   res.send(pjesme);
-});
+let dbConnection;
 
-app.listen(3000);
+module.exports = {
+  connectToServer: function (callback) {
+    client.connect(function (err, db) {
+      if (err || !db) {
+        return callback(err);
+      }
+
+      dbConnection = db.db("Pjesme");
+      console.log("Successfully connected to MongoDB.");
+
+      return callback();
+    });
+  },
+
+  getDb: function () {
+    return dbConnection;
+  },
+};
