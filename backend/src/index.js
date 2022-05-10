@@ -17,10 +17,6 @@ async function main() {
 
 main().catch(console.error);
 
-/**
- * Print the names of all available databases
- * @param {MongoClient} client A MongoClient that is connected to a cluster
- */
 async function listDatabases(client) {
     databasesList = await client.db().admin().listDatabases();
 
