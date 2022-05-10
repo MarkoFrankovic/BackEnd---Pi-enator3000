@@ -1,27 +1,36 @@
 const { MongoClient } = import("mongodb");
 const connectionString = process.env.ATLAS_URI;
-const client = new MongoClient(connectionString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const mongoose = import('mongoose');
 
-let dbConnection;
+async function main(){
+  /**
+   * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
+   * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
+   */
+  const uri = "mongodb+srv://Korisnik:korisnik@databaza.tip3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
-module.exports = {
-  connectToServer: function (callback) {
-    client.connect(function (err, db) {
-      if (err || !db) {
-        return callback(err);
-      }
+  const client = new MongoClient(uri);
 
-      dbConnection = db.db("Pjesme");
-      console.log("Successfully connected to MongoDB.");
+  try {
+      // Connect to the MongoDB cluster
+      await client.connect();
 
-      return callback();
-    });
-  },
+      // Make the appropriate DB calls
+      await  listDatabases(client);
 
-  getDb: function () {
-    return dbConnection;
-  },
+  } catch (e) {
+      console.error(e);
+  } finally {
+      await client.close();
+  }
+
+  async function listDatabases(client){
+    databasesList = await client.db().admin().listDatabases();
+ 
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
 };
+
+}
+
+main().catch(console.error);
