@@ -1,36 +1,34 @@
-const { MongoClient } = import("mongodb");
-const connectionString = process.env.ATLAS_URI;
-const mongoose = import('mongoose');
+const { MongoClient } = import('mongodb');
 
-async function main(){
-  /**
-   * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
-   * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
-   */
-  const uri = "mongodb+srv://Korisnik:korisnik@databaza.tip3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+async function main() {
+   
+    const uri = "mongodb+srv://Korisnik:korisnik@databaza.tip3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
-  const client = new MongoClient(uri);
+    const client = new MongoClient(uri);
 
-  try {
-      // Connect to the MongoDB cluster
-      await client.connect();
+    try {
+    
+        await client.connect();
 
-      // Make the appropriate DB calls
-      await  listDatabases(client);
+        await listDatabases(client);
 
-  } catch (e) {
-      console.error(e);
-  } finally {
-      await client.close();
-  }
+    } catch (e) {
+        console.error(e);
+    } finally {
 
-  async function listDatabases(client){
-    databasesList = await client.db().admin().listDatabases();
- 
-    console.log("Databases:");
-    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-};
-
+        await client.close();
+    }
 }
 
 main().catch(console.error);
+
+/**
+ * Print the names of all available databases
+ * @param {MongoClient} client A MongoClient that is connected to a cluster
+ */
+async function listDatabases(client) {
+    databasesList = await client.db().admin().listDatabases();
+
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+};
