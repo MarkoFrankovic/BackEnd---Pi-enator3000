@@ -2,22 +2,17 @@ const { MongoClient } = import('mongodb');
 
 async function main() {
    
-    const uri = "mongodb+srv://Korisnik:korisnik@databaza.tip3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+    const uri = "mongodb+srv://Korisnik:korisnik@databaza.tip3k.mongodb.net/Databaza?retryWrites=true&w=majority";
 
-    const client = new MongoClient(uri);
-
-    try {
-    
-        await client.connect();
-
-        await listDatabases(client);
-
-    } catch (e) {
-        console.error(e);
-    } finally {
-
-        await client.close();
-    }
+    MongoClient.connect(uri,function(err, db){
+        if(err) 
+          console.log(err);
+        else
+        {
+          console.log('Mongo Conn....');
+  
+        }
+      });
 }
 
 main().catch(console.error);
